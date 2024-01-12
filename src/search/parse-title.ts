@@ -33,11 +33,11 @@ const REGEXES = [
     groups: ['season'],
   },
   {
-    regex: /[\s\.]S(\d}{2})[\s\.]/i,
+    regex: /[\s\.]S(\d{2})[\s\.]/i,
     groups: ['season'],
   },
   {
-    regex: /[\s\.]E(\d}{2})[\s\.]/i,
+    regex: /[\s\.]E(\d{2})[\s\.]/i,
     groups: ['episode'],
   }
 ]

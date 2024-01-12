@@ -2,16 +2,15 @@
 
 import { Title } from "@/search/model";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import useSWR from "swr";
 
 const fetcher = (...args: any[]) => fetch(...args).then(res => res.json())
 
 export default function Home() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("Rick and Morty");
   const { data, error, isLoading } = useSWR<Title[]>(`/api/search?query=${query}`, fetcher);
-
-  console.log({ query, data, error, isLoading })
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-10">
@@ -48,7 +47,7 @@ export default function Home() {
               className="w-[200px] h-[300px]"
             />
             <div>
-              <h2 className="text-4xl">{result.title}</h2>
+              <Link href={`/title/${result.imdbId}?query=${query}`} className="text-4xl">{result.title}</Link>
               <p>{result.year}</p>
             </div>
             <ul className="w-[200px]">
