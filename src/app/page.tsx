@@ -1,28 +1,66 @@
-import { searchTitles } from '@/search/engine'
-import Image from 'next/image'
+'use client';
 
-export default async function Home() {
-  const searchResult = await searchTitles('harry potter')
+import { Title } from "@/search/model";
+import Image from "next/image";
+import { useState } from "react";
+import useSWR from "swr";
+
+const fetcher = (...args: any[]) => fetch(...args).then(res => res.json())
+
+export default function Home() {
+  const [query, setQuery] = useState("");
+  const { data, error, isLoading } = useSWR<Title[]>(`/api/search?query=${query}`, fetcher);
+
+  console.log({ query, data, error, isLoading })
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-10">
-      <ul className='space-y-4'>
-        {searchResult.map((result) => (
-          <li key={result.imdbId} className="grid grid-cols-[200px_1fr_200px] gap-4">
+      <header className="flex flex-col items-center justify-center space-y-4">
+        <h1 className="text-4xl font-bold">Search</h1>
+        <form className="flex flex-row gap-4">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="border-2 border-gray-400 rounded-lg p-2"
+          />
+          <button
+            type="submit"
+            className="border-2 border-gray-400 rounded-lg p-2"
+          >
+            Search
+          </button>
+        </form>
+      </header>
+      {isLoading && <p>Loading...</p>}
+      {error && <p>Error: {error.message}</p>}
+      <ul className="space-y-4 w-full">
+        {data?.map((result) => (
+          <li
+            key={result.imdbId}
+            className="grid grid-cols-[200px_1fr_200px] gap-4"
+          >
             <Image
               src={result.images[0].url}
               alt={result.title}
               width={200}
               height={300}
-              className='w-[200px] h-[300px]'
+              className="w-[200px] h-[300px]"
             />
             <div>
-              <h2 className='text-lg'>{result.title}</h2>
+              <h2 className="text-4xl">{result.title}</h2>
               <p>{result.year}</p>
             </div>
-            <ul className='w-[200px]'>
+            <ul className="w-[200px]">
               {result.sources.slice(0, 10).map((source) => (
-                <li key={source.id} title={source.name} className='flex flex-row gap-1'>
+                <li
+                  key={source.id}
+                  title={source.name}
+                  className="flex flex-row gap-1"
+                >
+                  {source.season !== undefined && <span>S{source.season}</span>}
+                  {source.episode !== undefined && <span>E{source.episode}</span>}
+
                   <span>{source.quality}</span>
                   <span>{source.seeders}</span>
                   <span>{source.leeches}</span>
@@ -33,5 +71,5 @@ export default async function Home() {
         ))}
       </ul>
     </main>
-  )
+  );
 }

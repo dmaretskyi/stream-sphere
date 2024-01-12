@@ -44,7 +44,7 @@ export const searchTitles = async (query: string): Promise<Title[]> => {
       category: imdbData.d[0].q,
       year: imdbData.d[0].y,
 
-      images: [imdbData.d[0].i].map(image => ({
+      images: [imdbData.d[0].i].filter(Boolean).map(image => ({
         width: image.width,
         height: image.height,
         url: image.imageUrl,
