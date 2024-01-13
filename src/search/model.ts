@@ -1,5 +1,6 @@
 export type Title = {
-  imdbId: string;
+  id: string;
+
   title: string;
   year?: number;
   category?: string;

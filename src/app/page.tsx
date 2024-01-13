@@ -36,7 +36,7 @@ export default function Home() {
       <ul className="space-y-4 w-full">
         {data?.map((result) => (
           <li
-            key={result.imdbId}
+            key={result.id}
             className="grid grid-cols-[200px_1fr_200px] gap-4"
           >
             <Image
@@ -47,7 +47,7 @@ export default function Home() {
               className="w-[200px] h-[300px]"
             />
             <div>
-              <Link href={`/title/${result.imdbId}?query=${query}`} className="text-4xl">{result.title}</Link>
+              <Link href={`/title/${result.id}?query=${query}`} className="text-4xl">{result.title}</Link>
               <p>{result.year}</p>
             </div>
             <ul className="w-[200px]">

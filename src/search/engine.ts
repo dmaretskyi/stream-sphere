@@ -41,7 +41,7 @@ const searchOnPirateBay = async (query: string) => {
     })
 
     return {
-      imdbId,
+      id: `imdb:${imdbId}`,
       title: imdbData?.d[0].l ?? sources[0].name,
       category: imdbData?.d[0].q ?? sources[0].category,
       year: imdbData?.d[0].y,

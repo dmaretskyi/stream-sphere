@@ -5,7 +5,7 @@ import { s } from "vitest/dist/reporters-trlZlObr.js";
 
 const getTitle = async (id: string, query: string) => {
   const titles = await searchTitles(query);
-  const title = titles.find((title) => title.imdbId === id);
+  const title = titles.find((title) => title.id === id);
   return title;
 };
 
