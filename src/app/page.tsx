@@ -9,7 +9,12 @@ import useSWR from "swr";
 const fetcher = (...args: any[]) => fetch(...args).then(res => res.json())
 
 export default function Home() {
-  const [query, setQuery] = useState("Rick and Morty");
+  const [query, setQuery] = useState(localStorage.getItem('query') ?? "Rick and Morty");
+  const changeQuery = (newValue: string) => {
+    localStorage.setItem("query", newValue);
+    setQuery(newValue);
+  }
+
   const { data, error, isLoading } = useSWR<Title[]>(`/api/search?query=${query}`, fetcher);
 
   return (
@@ -20,7 +25,7 @@ export default function Home() {
           <input
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => changeQuery(e.target.value)}
             className="border-2 border-gray-400 rounded-lg p-2"
           />
           <button
