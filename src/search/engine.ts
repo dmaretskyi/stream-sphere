@@ -3,7 +3,7 @@ import { Source, Title } from "./model";
 import { parseTitle } from "./parse-title";
 import { SearchResult, searchPirateBay } from "./pirate-bay"
 
-export const searchTitles = async (query: string): Promise<Title[]> => {
+const searchOnPirateBay = async (query: string) => {
   const results = await searchPirateBay(query);
 
   const byImdbId = results.reduce<Record<string, SearchResult[]>>((acc, result) => {
@@ -55,4 +55,10 @@ export const searchTitles = async (query: string): Promise<Title[]> => {
       sources
     } satisfies Title;
   }));
+}
+
+
+export const searchTitles = async (query: string): Promise<Title[]> => {
+  const pirateBayResults = await searchOnPirateBay(query);
+  return pirateBayResults;
 }

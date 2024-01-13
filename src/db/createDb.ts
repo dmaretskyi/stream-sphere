@@ -1,4 +1,4 @@
-import { getDataDir } from "@/util/data-dir"
+import { getDataDir } from "../util/data-dir"
 import { mkdir } from "fs/promises"
 import { join } from "path"
 import { open } from "sqlite"

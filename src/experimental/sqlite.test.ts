@@ -1,4 +1,4 @@
-import { createTempDb } from "@/util/testing";
+import { createTempDb } from "../util/testing";
 import sql from "sql-template-strings";
 import sqlite3 from "sqlite3";
 import { describe, test } from "vitest";

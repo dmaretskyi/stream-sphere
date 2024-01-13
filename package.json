@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "VITE_CJS_IGNORE_WARNING=true vitest",
+    "test": "STSP_DATA_DIR=~/.stsp VITE_CJS_IGNORE_WARNING=true vitest",
     "init": "STSP_DATA_DIR=~/.stsp tsx src/bin/init.ts"
   },
   "dependencies": {

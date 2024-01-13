@@ -33,3 +33,39 @@ export const importBackup = async (db: Database) => {
   await importDir('mal/anime', 'malbak:mal:')
   await importDir('anilist/anime', 'malbak:anilist:')
 }
+
+export type MalBackupEntry = {
+  id: number;
+  type: string;
+  title: string;
+  url: string;
+  image: string;
+  anidbId: number;
+  aniId: number;
+  Sites: {
+    [site: string]: {
+      [id: string]: {
+        identifier: string;
+        image: string;
+        malId: number;
+        aniId: number;
+        page: string;
+        title: string;
+        type: string;
+        url: string;
+      };
+    };
+  };
+};
+
+export const searchMalBackup = async (db: Database, query: string) => {
+  const entry = await db.all(sql`SELECT * FROM mal_backup WHERE data MATCH ${query}`);
+
+  const results = new Map<string, MalBackupEntry>();
+  for (const row of entry) {
+    const data = JSON.parse(row.data) as MalBackupEntry;
+    results.set(data.id.toString(), data);
+  }
+
+  return Array.from(results.values());
+}
