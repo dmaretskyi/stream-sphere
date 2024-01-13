@@ -1,4 +1,3 @@
-import { s } from "vitest/dist/reporters-trlZlObr.js";
 import { fetchTitleData } from "./imdb";
 import { Source, Title } from "./model";
 import { parseTitle } from "./parse-title";
