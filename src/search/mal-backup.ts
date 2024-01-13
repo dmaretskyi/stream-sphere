@@ -35,6 +35,8 @@ export const importBackup = async (db: Database) => {
 }
 
 export type MalBackupEntry = {
+  stspId: string;
+
   id: number;
   type: string;
   title: string;
@@ -63,8 +65,8 @@ export const searchMalBackup = async (db: Database, query: string) => {
 
   const results = new Map<string, MalBackupEntry>();
   for (const row of entry) {
-    const data = JSON.parse(row.data) as MalBackupEntry;
-    results.set(data.id.toString(), data);
+    const data = JSON.parse(row.data);
+    results.set(data.id.toString(), { stspId: row.id, ...data });
   }
 
   return Array.from(results.values());

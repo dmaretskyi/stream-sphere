@@ -1,10 +1,12 @@
+import { getDb } from "@/app/db";
 import { searchTitles } from "@/search/engine";
 import { Source } from "@/search/model";
+import Image from "next/image";
 import Link from "next/link";
 import { s } from "vitest/dist/reporters-trlZlObr.js";
 
 const getTitle = async (id: string, query: string) => {
-  const titles = await searchTitles(query);
+  const titles = await searchTitles(await getDb(), query);
   const title = titles.find((title) => title.id === id);
   return title;
 };
@@ -16,10 +18,10 @@ export default async function Title({
   params: { id: string };
   searchParams: { query: string };
 }) {
-  const title = await getTitle(params.id, searchParams.query);
+  const title = await getTitle(decodeURIComponent(params.id), searchParams.query);
 
   if (!title) {
-    throw new Error("Title not found");
+    throw new Error("Title not found " + params.id);
   }
 
   const sourceBySeason = title.sources.reduce<Record<string, Source[]>>(
@@ -32,8 +34,15 @@ export default async function Title({
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-10">
-      <h1 className="text-4xl">{title.title}</h1>
-      <p>{title.year}</p>
+      <h1 className="text-4xl">{title.info.title}</h1>
+      <p>{title.info.year}</p>
+      <Image
+        src={title.images[0]?.url}
+        alt={title.info.title}
+        width={200}
+        height={300}
+        className="w-[200px] h-[300px]"
+      />
       <ul>
         {Object.entries(sourceBySeason).map(([season, sources]) => (
           <li key={season}>
@@ -56,8 +65,8 @@ export default async function Title({
                     <span>{source.quality}</span>
                     <span>{source.seeders}</span>
                     <span>{source.leeches}</span>
-                    <span>{source.username}</span>
-                    <Link href={createMagnetLink(source.info_hash)} target="_blank">magnet</Link>
+                    <span>{source.username ?? source.type}</span>
+                    <Link href={source.url!} target="_blank">link</Link>
                   </li>
                 ))}
             </ul>
@@ -67,6 +76,3 @@ export default async function Title({
     </main>
   );
 }
-
-const createMagnetLink = (infoHash: string) =>
-`magnet:?xt=urn:btih:${infoHash}&dn=Rick.and.Morty.S07E06.1080p.WEB.H264-NHTFS%5BTGx%5D&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.bittor.pw%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Fpublic.popcorn-tracker.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce`

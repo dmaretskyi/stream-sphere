@@ -41,14 +41,14 @@ export default function Home() {
           >
             <Image
               src={result.images[0]?.url}
-              alt={result.title}
+              alt={result.info.title}
               width={200}
               height={300}
               className="w-[200px] h-[300px]"
             />
             <div>
-              <Link href={`/title/${result.id}?query=${query}`} className="text-4xl">{result.title}</Link>
-              <p>{result.year}</p>
+              <Link href={`/title/${result.id}?query=${query}`} className="text-4xl">{result.info.title}</Link>
+              <p>{result.info.year}</p>
             </div>
             <ul className="w-[200px]">
               {result.sources.slice(0, 10).map((source) => (
