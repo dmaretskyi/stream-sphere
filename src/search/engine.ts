@@ -1,3 +1,4 @@
+import { s } from "vitest/dist/reporters-trlZlObr.js";
 import { fetchTitleData } from "./imdb";
 import { Source, Title } from "./model";
 import { parseTitle } from "./parse-title";
@@ -6,13 +7,14 @@ import { SearchResult, searchPirateBay } from "./pirate-bay"
 export const searchTitles = async (query: string): Promise<Title[]> => {
   const results = await searchPirateBay(query);
 
-  const byImdbId: Record<string, SearchResult[]> = {}
-  results.forEach(result => {
-    (byImdbId[result.imdb] ??= []).push(result);
-  });
+  const byImdbId = results.reduce<Record<string, SearchResult[]>>((acc, result) => {
+    (acc[result.imdb || `nil-${result.id}`] ??= []).push(result);
+    return acc;
+  }, {});
 
   return await Promise.all(Object.entries(byImdbId).map(async ([imdbId, results]) => {
-    const imdbData = await fetchTitleData(imdbId);
+
+    const imdbData = !imdbId.startsWith('nil') ? await fetchTitleData(imdbId) : undefined;
 
     const sources = results.map(result => {
       const parsedData = parseTitle(result.name);
@@ -21,6 +23,7 @@ export const searchTitles = async (query: string): Promise<Title[]> => {
         
         id: result.id,
         name: result.name,
+        category: result.category,
         info_hash: result.info_hash,
 
         size: result.size,
@@ -40,11 +43,11 @@ export const searchTitles = async (query: string): Promise<Title[]> => {
 
     return {
       imdbId,
-      title: imdbData.d[0].l,
-      category: imdbData.d[0].q,
-      year: imdbData.d[0].y,
+      title: imdbData?.d[0].l ?? sources[0].name,
+      category: imdbData?.d[0].q ?? sources[0].category,
+      year: imdbData?.d[0].y,
 
-      images: [imdbData.d[0].i].filter(Boolean).map(image => ({
+      images: [imdbData?.d[0].i!].filter(Boolean).map(image => ({
         width: image.width,
         height: image.height,
         url: image.imageUrl,

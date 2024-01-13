@@ -40,7 +40,7 @@ export default function Home() {
             className="grid grid-cols-[200px_1fr_200px] gap-4"
           >
             <Image
-              src={result.images[0].url}
+              src={result.images[0]?.url}
               alt={result.title}
               width={200}
               height={300}

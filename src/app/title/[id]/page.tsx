@@ -24,7 +24,7 @@ export default async function Title({
 
   const sourceBySeason = title.sources.reduce<Record<string, Source[]>>(
     (acc, source) => {
-      (acc[source.season?.toString() ?? "nil"] ??= []).push(source);
+      (acc[source.season?.toString()!] ??= []).push(source);
       return acc;
     },
     {}

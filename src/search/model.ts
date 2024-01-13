@@ -18,6 +18,7 @@ export type Image = {
 export type Source = {
   id: string;
   name: string;
+  category: string;
   
   season?: number;
   episode?: number;
