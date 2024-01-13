@@ -58,7 +58,7 @@ const searchOnPirateBay = async (query: string) => {
           url: `https://www.imdb.com/title/${imdbId}/`,
         }
       ],
-      images: [imdbData?.d[0].i!].filter(Boolean).map(image => ({
+      images: [imdbData?.d[0]?.i!].filter(Boolean).map(image => ({
         width: image.width,
         height: image.height,
         url: image.imageUrl,

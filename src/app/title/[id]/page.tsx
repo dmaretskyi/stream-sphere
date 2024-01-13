@@ -43,6 +43,15 @@ export default async function Title({
         height={300}
         className="w-[200px] h-[300px]"
       />
+      <u>
+        {title.references.filter(reference => reference.url).map((reference) => (
+          <li key={reference.id}>
+            <Link href={reference.url!} target="__blank">
+              {reference.platform}
+            </Link>
+          </li>
+        ))}
+      </u>
       <ul>
         {Object.entries(sourceBySeason).map(([season, sources]) => (
           <li key={season}>
