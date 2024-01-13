@@ -1,6 +1,6 @@
 import { Database } from "sqlite";
 import { fetchTitleData } from "./imdb";
-import { Image, Source, Title } from "./model";
+import { Image, Reference, Source, Title } from "./model";
 import { parseTitle } from "./parse-title";
 import { SearchResult, searchPirateBay } from "./pirate-bay"
 import { searchMalBackup } from "./mal-backup";
@@ -45,19 +45,23 @@ const searchOnPirateBay = async (query: string) => {
     })
 
     return {
-      id: `imdb:${imdbId}`,
+      id: !imdbId.startsWith('nil') ? `imdb:${imdbId}` : `piratebay:${results[0].id}`,
       info: {
         title: imdbData?.d[0]?.l ?? sources[0].name,
         category: imdbData?.d[0]?.q ?? sources[0].category,
         year: imdbData?.d[0]?.y,
       },
       references: [
-        {
+        imdbData && {
           platform: 'imdb',
           id: imdbId,
           url: `https://www.imdb.com/title/${imdbId}/`,
-        }
-      ],
+        } satisfies Reference,
+        sources.length === 1 ? {
+          platform: 'piratebay',
+          url: `https://piratebay.party/torrent/${results[0].id}`,
+        } : undefined,
+      ].filter(Boolean) as Reference[],
       images: [imdbData?.d[0]?.i!].filter(Boolean).map(image => ({
         width: image.width,
         height: image.height,

@@ -3,7 +3,7 @@ export type Title = {
   info: TitleInfo,
 
   images: Image[];
-  references: References[];
+  references: Reference[];
   sources: Source[];
 }
 
@@ -19,7 +19,7 @@ export type Image = {
   url: string;
 }
 
-export type References = {
+export type Reference = {
   /**
    * The platform this title is from.
    * 
