@@ -13,6 +13,9 @@
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
+    "sql-template-strings": "^2.2.2",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
     "swr": "^2.2.4"
   },
   "devDependencies": {
