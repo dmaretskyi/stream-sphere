@@ -26,7 +26,6 @@ const searchOnPirateBay = async (query: string) => {
 
         name: result.name,
         category: result.category,
-        info_hash: result.info_hash,
         url: createMagnetLink(result.info_hash, result.name),
 
         size: result.size,
@@ -89,6 +88,7 @@ const searchOnMalBackup = async (db: Database, query: string): Promise<Title[]> 
       references: [
         {
           platform: 'myanimelist',
+          id: entry.malId?.toString(),
           url: entry.url,
         }
       ],
@@ -99,7 +99,6 @@ const searchOnMalBackup = async (db: Database, query: string): Promise<Title[]> 
             type: site.toLowerCase(),
             name: entry.title,
             category: entry.type,
-            info_hash: entry.identifier,
             url: entry.url,
             tags: []
           } satisfies Source;

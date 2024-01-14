@@ -44,6 +44,7 @@ export type MalBackupEntry = {
   image: string;
   anidbId: number;
   aniId: number;
+  malId?: number;
   Sites: {
     [site: string]: {
       [id: string]: {

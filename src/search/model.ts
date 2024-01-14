@@ -44,7 +44,6 @@ export type Source = {
    */
   type: string;
 
-  info_hash?: string;
   url?: string;
 
   name: string;
