@@ -3,7 +3,6 @@ import { searchTitles } from "@/search/engine";
 import { Source } from "@/search/model";
 import Image from "next/image";
 import Link from "next/link";
-import { s } from "vitest/dist/reporters-trlZlObr.js";
 
 const getTitle = async (id: string, query: string) => {
   const titles = await searchTitles(await getDb(), query);
