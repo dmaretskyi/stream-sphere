@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  app:
+    container_name: stream-sphere
+    build: .
+    image: dt/stream-sphere:0.1
+    environment:
+      - STSP_DATA_DIR=/app/.stsp
+    ports:
+      - "3000:3000"
