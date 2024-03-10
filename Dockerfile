@@ -15,9 +15,6 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-RUN \
-  if [ -f pnpm-lock.yaml ]; then pnpm rebuild sqlite3;\
-  else echo "Lockfile not found." && exit 1; \
-  fi
+RUN pnpm run init
 
 CMD [ "pnpm", "dev" ]

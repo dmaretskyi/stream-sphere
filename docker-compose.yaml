@@ -4,10 +4,6 @@ services:
     container_name: stream-sphere
     build: .
     image: dt/stream-sphere:0.1
-    volumes:
-      - ./:/app
-      - ~/.stsp:/app/.stsp
-      - ~/tmp_data:/app/tmp/stream-sphere-mal-import
     environment:
       - STSP_DATA_DIR=/app/.stsp
     ports:
