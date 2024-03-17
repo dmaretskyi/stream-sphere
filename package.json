@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "test": "STSP_DATA_DIR=~/.stsp VITE_CJS_IGNORE_WARNING=true vitest",
-    "init": "STSP_DATA_DIR=~/.stsp tsx src/bin/init.ts"
+    "init": "STSP_DATA_DIR=~/.stsp tsx src/bin/init.ts",
+    "format": "prettier --check --ignore-path .gitignore .",
+    "format:fix": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
     "async-parallel": "^1.2.3",
@@ -29,8 +31,11 @@
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
+    "eslint-config-prettier": "^9.1.0",
     "jsdom": "^23.2.0",
     "postcss": "^8",
+    "prettier": "2.8.8",
+    "prettier-plugin-tailwindcss": "^0.5.12",
     "tailwindcss": "^3.3.0",
     "tsx": "^4.7.0",
     "typescript": "^5",
