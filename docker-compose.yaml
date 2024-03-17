@@ -7,4 +7,4 @@ services:
     environment:
       - STSP_DATA_DIR=/app/.stsp
     ports:
-      - "3000:3000"
+      - '3000:3000'

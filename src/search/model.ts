@@ -1,28 +1,28 @@
 export type Title = {
   id: string;
-  info: TitleInfo,
+  info: TitleInfo;
 
   images: Image[];
   references: Reference[];
   sources: Source[];
-}
+};
 
 export type TitleInfo = {
   title: string;
   year?: number;
   category?: string;
-}
+};
 
 export type Image = {
   width?: number;
   height?: number;
   url: string;
-}
+};
 
 export type Reference = {
   /**
    * The platform this title is from.
-   * 
+   *
    * - imdb
    * - anidb
    * - myanimelist
@@ -31,14 +31,14 @@ export type Reference = {
   platform: string;
   id?: string;
   url?: string;
-}
+};
 
 export type Source = {
   id: string;
 
   /**
    * The type of source.
-   * 
+   *
    * - torrent
    * - ...various anime sites
    */
@@ -48,7 +48,7 @@ export type Source = {
 
   name: string;
   category?: string;
-  
+
   season?: number;
   episode?: number;
 
@@ -63,4 +63,4 @@ export type Source = {
   username?: string;
   added?: string;
   status?: string;
-}
+};

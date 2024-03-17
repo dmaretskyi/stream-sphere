@@ -5,48 +5,52 @@ export type ImdbTitleData = {
        * Images
        */
       i: {
-        height: number,
-        imageUrl: string
-        width: number
-      },
-      id: string,
+        height: number;
+        imageUrl: string;
+        width: number;
+      };
+      id: string;
       /**
        * Title
        */
-      l: string,
+      l: string;
 
       /**
        * Category
        */
-      q: string,
+      q: string;
 
       /**
        * Category ID.
        */
-      qid: string,
-      rank: number,
+      qid: string;
+      rank: number;
       /**
        * Authors.
        */
-      s: string,
+      s: string;
 
       /**
        * Year.
        */
-      y: number
-    }
-  ],
+      y: number;
+    },
+  ];
   /**
    * Query.
    */
-  q: string,
-  v: number
-}
+  q: string;
+  v: number;
+};
 
-export const fetchTitleData = async (titleId: string): Promise<ImdbTitleData> => {
-  const res = await fetch(`https://v2.sg.media-imdb.com/suggestion/t/${titleId}.json`);
+export const fetchTitleData = async (
+  titleId: string
+): Promise<ImdbTitleData> => {
+  const res = await fetch(
+    `https://v2.sg.media-imdb.com/suggestion/t/${titleId}.json`
+  );
 
   const json = await res.json();
 
   return json;
-}
+};

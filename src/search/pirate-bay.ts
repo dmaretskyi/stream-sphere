@@ -11,12 +11,16 @@ export type SearchResult = {
   status: string;
   category: string;
   imdb: string;
-}
+};
 
-export const searchPirateBay = async (query: string): Promise<SearchResult[]> => {
-  const res = await fetch(`https://apibay.org/q.php?q=${encodeURIComponent(query)}`);
+export const searchPirateBay = async (
+  query: string
+): Promise<SearchResult[]> => {
+  const res = await fetch(
+    `https://apibay.org/q.php?q=${encodeURIComponent(query)}`
+  );
 
   const json = await res.json();
 
   return json;
-}
+};
