@@ -1,23 +1,27 @@
 'use client';
 
 import { Title } from '@/search/model';
+import { MagnifyingGlass } from '@phosphor-icons/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import useSWR from 'swr';
+import PirateBayLogo from '../assets/the-pirate-bay-logo-svg-vector.svg';
 
-// @ts-ignore
-const fetcher = (...args: any[]) => fetch(...args).then((res) => res.json());
+const fetcher = (...args: any[]) =>
+  (fetch as any)(...args).then((res: any) => res.json());
 
-const DEFAULT_QUERY = 'Rick and Morty';
+const getInitialQuery = () => {
+  return typeof localStorage !== 'undefined'
+    ? localStorage.getItem('query') ?? ''
+    : '';
+};
+
 export default function Home() {
-  const [query, setQuery] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('query') ?? DEFAULT_QUERY;
-    }
+  const [query, setQuery] = useState(getInitialQuery());
+  const [apiQuery, setApiQuery] = useState(getInitialQuery());
 
-    return DEFAULT_QUERY;
-  });
   const changeQuery = (newValue: string) => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('query', newValue);
@@ -27,74 +31,112 @@ export default function Home() {
   };
 
   const { data, error, isLoading } = useSWR<Title[]>(
-    `/api/search?query=${query}`,
+    `/api/search?query=${apiQuery}`,
     fetcher
   );
 
+  const router = useRouter();
+
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-10'>
-      <header className='flex flex-col items-center justify-center space-y-4'>
-        <h1 className='text-4xl font-bold'>Search</h1>
-        <form className='flex flex-row gap-4'>
+    <main className='grid h-screen grid-rows-[4rem_1fr]  justify-items-center overflow-hidden'>
+      <header
+        className='scrollbar-hide mb-2 box-border grid w-screen content-center 
+      items-center justify-items-center border-b-[1px] border-b-[rgb(var(--charcoal-grey))] bg-[rgb(var(--background-panel-rgb))] only:h-screen'
+      >
+        {apiQuery === '' && (
+          <h1 className='box-border p-2 text-[3rem]'>Search StreamSphere</h1>
+        )}
+        <form
+          className='box-border grid w-[40%] grid-cols-[1fr_auto]'
+          onSubmit={(e) => e.preventDefault()}
+        >
           <input
             type='text'
             value={query}
             onChange={(e) => changeQuery(e.target.value)}
-            className='rounded-lg border-2 border-gray-400 p-2'
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === 'Enter') {
+                setApiQuery((e.target as HTMLInputElement).value);
+              }
+            }}
+            className='h-[2.5rem] rounded-[0.5rem_0rem_0rem_0.5rem] border-2 border-r-0 border-[rgb(var(--charcoal-grey))] bg-inherit p-2 focus:outline-none'
           />
           <button
-            type='submit'
-            className='rounded-lg border-2 border-gray-400 p-2'
+            className='group grid h-[2.5rem] content-center rounded-[0rem_0.5rem_0.5rem_0rem] border-2 border-l-0 border-[rgb(var(--charcoal-grey))] p-2'
+            onClick={() => setApiQuery(query)}
           >
-            Search
+            <MagnifyingGlass
+              className='group-hover:opacity-50'
+              size={'1.5rem'}
+            />
           </button>
         </form>
       </header>
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
-      <ul className='w-full space-y-4'>
-        {data?.map((result) => (
-          <li
-            key={result.id}
-            className='grid grid-cols-[200px_1fr_200px] gap-4'
-          >
-            <Image
-              src={result.images[0]?.url}
-              alt={result.info.title}
-              width={200}
-              height={300}
-              className='h-[300px] w-[200px]'
-            />
-            <div>
-              <Link
-                href={`/title/${result.id}?query=${query}`}
-                className='text-4xl'
+      {apiQuery !== '' && (
+        <div className='no-scrollbar grid  w-full justify-items-center overflow-y-scroll'>
+          {isLoading && <p>Loading...</p>}
+          {error && <p>Error: {error.message}</p>}
+          <ul className='w-[60%] space-y-4 '>
+            {data?.map((result) => (
+              <li
+                key={result.id}
+                className='group grid h-[10rem] cursor-pointer grid-cols-[auto_1fr] gap-4 overflow-hidden  rounded-[0.5rem] p-[0.5rem]  hover:bg-[rgb(var(--charcoal-grey))]'
+                onClick={() =>
+                  router.push(`/title/${result.id}?query=${apiQuery}`)
+                }
               >
-                {result.info.title}
-              </Link>
-              <p>{result.info.year}</p>
-            </div>
-            <ul className='w-[200px]'>
-              {result.sources.slice(0, 10).map((source) => (
-                <li
-                  key={source.id}
-                  title={source.name}
-                  className='flex flex-row gap-1'
-                >
-                  {source.season !== undefined && <span>S{source.season}</span>}
-                  {source.episode !== undefined && (
-                    <span>E{source.episode}</span>
-                  )}
+                {result.images[0] ? (
+                  <Image
+                    src={result.images[0]?.url}
+                    alt={result.info.title}
+                    width={100}
+                    height={150}
+                    className='h-[9rem] w-[6rem] rounded-[0.25rem]'
+                  />
+                ) : (
+                  <div className='h-[9rem] w-[6rem] rounded-[0.25rem] bg-[white]'>
+                    {result.id.includes('piratebay') && (
+                      <Image src={PirateBayLogo} alt='Pirate Bay' />
+                    )}
+                  </div>
+                )}
 
-                  <span>{source.quality}</span>
-                  <span>{source.seeders}</span>
-                  <span>{source.leeches}</span>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ul>
+                <div>
+                  <div className='text-[1rem]'>
+                    <Link
+                      href={`/title/${result.id}?query=${apiQuery}`}
+                      className='text-[1.75rem] group-hover:underline'
+                    >
+                      {result.info.title}
+                    </Link>
+                    <p>{result.info.year}</p>
+                  </div>
+                  <ul className='w-[200px]'>
+                    {result.sources.slice(0, 10).map((source) => (
+                      <li
+                        key={source.id}
+                        title={source.name}
+                        className='flex flex-row gap-1'
+                      >
+                        {source.season !== undefined && (
+                          <span>S{source.season}</span>
+                        )}
+                        {source.episode !== undefined && (
+                          <span>E{source.episode}</span>
+                        )}
+
+                        <span>{source.quality}</span>
+                        <span>{source.seeders}</span>
+                        <span>{source.leeches}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </main>
   );
 }
