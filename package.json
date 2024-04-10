@@ -7,9 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "STSP_DATA_DIR=~/.stsp VITE_CJS_IGNORE_WARNING=true vitest",
+    "test": "STSP_DATA_DIR=~/.stsp VITE_CJS_IGNORE_WARNING=true vitest --allowOnly",
     "init": "STSP_DATA_DIR=~/.stsp tsx src/bin/init.ts",
-    "format": "prettier --check --ignore-path .gitignore .",
+    "format": "prettier --check --ignore-path .gitignore --ignore-path .prettierignore .",
     "format:fix": "prettier --write --ignore-path .gitignore . && eslint --fix ."
   },
   "dependencies": {
