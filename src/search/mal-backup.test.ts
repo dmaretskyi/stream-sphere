@@ -9,7 +9,7 @@ test.skip('mal import', async () => {
   await importBackup(db);
 }, 120_000);
 
-test.only('search', async () => {
+test('search', async () => {
   const db = await createDb();
   const results = await searchMalBackup(db, 'eminence');
   console.log(inspect(results, { depth: null, colors: true }));
