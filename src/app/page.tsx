@@ -73,7 +73,7 @@ export default function Home() {
         </form>
       </header>
       {apiQuery !== '' && (
-        <div className='no-scrollbar grid  w-full justify-items-center overflow-y-scroll'>
+        <div className='grid w-full  justify-items-center overflow-y-scroll no-scrollbar'>
           {isLoading && <p>Loading...</p>}
           {error && <p>Error: {error.message}</p>}
           <ul className='w-[60%] space-y-4 '>
