@@ -73,14 +73,14 @@ export default function Home() {
         </form>
       </header>
       {apiQuery !== '' && (
-        <div className='no-scrollbar grid  w-full justify-items-center overflow-y-scroll'>
+        <div className='grid w-full  justify-items-center overflow-y-scroll no-scrollbar'>
           {isLoading && <p>Loading...</p>}
           {error && <p>Error: {error.message}</p>}
           <ul className='w-[60%] space-y-4 '>
             {data?.map((result) => (
               <li
                 key={result.id}
-                className='group grid h-[10rem] cursor-pointer grid-cols-[auto_1fr] gap-4 overflow-hidden  rounded-[0.5rem] p-[0.5rem]  hover:bg-[rgb(var(--charcoal-grey))]'
+                className='group grid h-[10rem] cursor-pointer grid-cols-[6rem_1fr] gap-4 overflow-hidden  rounded-[0.5rem] p-[0.5rem]  hover:bg-[rgb(var(--charcoal-grey))]'
                 onClick={() =>
                   router.push(`/title/${result.id}?query=${apiQuery}`)
                 }
@@ -100,7 +100,6 @@ export default function Home() {
                     )}
                   </div>
                 )}
-
                 <div>
                   <div className='text-[1rem]'>
                     <Link
@@ -109,28 +108,24 @@ export default function Home() {
                     >
                       {result.info.title}
                     </Link>
-                    <p>{result.info.year}</p>
+                    <p>
+                      {result.info.year}{' '}
+                      {/\d/.test(result.info.category || '')
+                        ? ''
+                        : result.info.category}
+                    </p>
                   </div>
-                  <ul className='w-[200px]'>
-                    {result.sources.slice(0, 10).map((source) => (
-                      <li
-                        key={source.id}
-                        title={source.name}
-                        className='flex flex-row gap-1'
-                      >
-                        {source.season !== undefined && (
-                          <span>S{source.season}</span>
-                        )}
-                        {source.episode !== undefined && (
-                          <span>E{source.episode}</span>
-                        )}
-
-                        <span>{source.quality}</span>
-                        <span>{source.seeders}</span>
-                        <span>{source.leeches}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className='flex gap-x-[0.3rem]'>
+                    {Array.from(
+                      new Set(result.sources.map((source) => source.type))
+                    )
+                      .slice(0, 10)
+                      .map((type) => (
+                        <div className='w-[fit-content] rounded-[1rem] border-[1px] border-[rgb(var(--background-panel-rgb))] bg-[rgb(var(--charcoal-grey))] p-[0rem_0.5rem_0.1rem_0.5rem] text-center'>
+                          {type}
+                        </div>
+                      ))}
+                  </div>
                 </div>
               </li>
             ))}
